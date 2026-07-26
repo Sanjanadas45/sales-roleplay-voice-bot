@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Sales Roleplay Voice Bot</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>AI Sales Roleplay Voice Bot</h1>
+
+    <!-- Configuration Selectors -->
+    <div class="controls">
+      <div class="control-group">
+        <label for="industry">Industry:</label>
+        <select id="industry">
+          <option value="B2B Tech / SaaS">B2B Tech / SaaS</option>
+          <option value="Healthcare & MedTech">Healthcare & MedTech</option>
+          <option value="E-commerce & Retail">E-commerce & Retail</option>
+          <option value="Financial Services">Financial Services</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="temperament">Temperament:</label>
+        <select id="temperament">
+          <option value="Skeptical & Analytical">Skeptical & Analytical</option>
+          <option value="Friendly & Easygoing">Friendly & Easygoing</option>
+          <option value="Impatient & Direct">Impatient & Direct</option>
+          <option value="Risk-Averse & Defensive">Risk-Averse & Defensive</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="difficulty">Difficulty Level:</label>
+        <select id="difficulty">
+          <option value="Easy">Easy</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="objection">Focus Objection:</label>
+        <select id="objection">
+          <option value="Pricing & Budget">Pricing & Budget</option>
+          <option value="Competitor Loyalty">Competitor Loyalty</option>
+          <option value="Time / Resources">Time / Resources</option>
+          <option value="Security & Compliance">Security & Compliance</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Call Action Buttons -->
+    <div class="actions">
+      <button id="startBtn" class="btn btn-primary">Start Voice Call</button>
+      <button id="endBtn" class="btn btn-danger">End Call & Get Score</button>
+    </div>
+
+    <div id="status" class="status-badge">Status: Idle</div>
+
+    <!-- Live Transcript Container -->
+    <div class="transcript-card">
+      <h2>Live Transcript</h2>
+      <div id="transcriptBox" class="transcript-box"></div>
+    </div>
+
+    <!-- Post Call Evaluation Report -->
+    <div id="evaluationCard" class="evaluation-card hidden">
+      <h2>Call Performance Evaluation</h2>
+      <div id="evaluationContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
