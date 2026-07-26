@@ -82,4 +82,4 @@ If you wish to clone and run this project locally, here are the steps:
     node server.js
 
 5. **Access the App:**
-    Open Chrome or Edge and navigate to http://localhost:3000.
+    Open Chrome or Edge and navigate to sales-roleplay-voice-bot.vercel.app.
