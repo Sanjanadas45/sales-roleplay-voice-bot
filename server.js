@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
@@ -8,11 +10,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Resolve __dirname equivalent for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * Resilient API Call Helper
@@ -46,6 +54,11 @@ async function generateContentWithRetry(modelName, prompt, retries = 2, delayMs 
     }
   }
 }
+
+// Explicit Root Route Handler for Vercel
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Endpoint 1: Handle Live Chat Responses
 app.post('/api/chat', async (req, res) => {
@@ -85,8 +98,8 @@ Strict Behavioral Rules:
     const latestMessage = message || (history && history.length > 0 ? (history[history.length - 1]?.parts?.[0]?.text || history[history.length - 1]?.text) : 'Hello!');
     const prompt = `${systemPrompt}\n\nCall Transcript History:\n${formattedHistory}\n\nSales Rep: ${latestMessage}\nBuyer:`;
 
-    // Strictly using gemini-1.5-flash-latest
-    const response = await generateContentWithRetry('gemini-flash-latest', prompt);
+    // Updated model string to gemini-2.0-flash
+    const response = await generateContentWithRetry('gemini-2.0-flash', prompt);
 
     res.json({ reply: response.text });
   } catch (error) {
@@ -128,8 +141,8 @@ Please analyze the sales rep's performance and provide a structured review:
 4. Objections Handled Well vs. Missed Opportunities
 5. Tactical Advice for Next Call`;
 
-    // Strictly using gemini-3.5-flash
-    const response = await generateContentWithRetry('gemini-flash-latest', evaluationPrompt);
+    // Updated model string to gemini-2.0-flash
+    const response = await generateContentWithRetry('gemini-2.0-flash', evaluationPrompt);
 
     res.json({ evaluation: response.text });
   } catch (error) {
@@ -138,6 +151,12 @@ Please analyze the sales rep's performance and provide a structured review:
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+// Start local server
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
+
+// Export default app for Vercel Serverless deployments
+export default app;
